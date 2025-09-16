@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\train_sac.py", line 172, in <module>
+    main()
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\train_sac.py", line 155, in main
+    model.learn(episodes=args.episodes)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\agents\base.py", line 163, in learn
+    self.update(observations, actions, rewards, next_observations, terminated=terminated, truncated=truncated)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\agents\sac.py", line 84, in update
+    n = self.get_encoded_observations(i, n)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\agents\sac.py", line 238, in get_encoded_observations
+    return np.array([j for j in np.hstack(self.encoders[index]*np.array(observations, dtype=float)) if j != None], dtype = float)
+KeyboardInterrupt

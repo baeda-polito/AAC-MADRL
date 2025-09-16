@@ -1,0 +1,33 @@
+{
+  "os": "Windows-10-10.0.26100-SP0",
+  "python": "CPython 3.9.0",
+  "startedAt": "2025-09-16T14:37:19.654971Z",
+  "args": [
+    "--lr=0.001",
+    "--episodes=10",
+    "--wandb=on",
+    "--wandb-project",
+    "TEST_DYNAMICS",
+    "--wandb-run-name",
+    "SAC_lr=0.001"
+  ],
+  "program": "C:\\Users\\sabry\\Documents\\Citylearn_dinamics\\train_sac.py",
+  "codePath": "train_sac.py",
+  "codePathLocal": "train_sac.py",
+  "email": "sabrina.savino@polito.it",
+  "root": "C:\\Users\\sabry\\Documents\\Citylearn_dinamics",
+  "host": "Sabrina",
+  "executable": "c:\\Users\\sabry\\Documents\\Citylearn_dinamics\\.venv\\Scripts\\python.exe",
+  "cpu_count": 8,
+  "cpu_count_logical": 16,
+  "disk": {
+    "/": {
+      "total": "1022755860480",
+      "used": "801264164864"
+    }
+  },
+  "memory": {
+    "total": "16456073216"
+  },
+  "writerId": "v5ippu44b6lri7s6gwjjh8i2jq7d46f9"
+}
