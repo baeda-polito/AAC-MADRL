@@ -5,7 +5,10 @@ import torch.nn.functional as F
 from torch.optim import Adam
 from torch.autograd import Variable
 from pathlib import Path
-
+from typing import Optional
+import json, zipfile, tempfile
+import numpy as np
+import torch
 import numpy as np
 import numpy.typing as npt
 
@@ -360,7 +363,8 @@ class AAC_MADRL(RLC):
             "dhw_storage": 21,
             "electrical_storage": 21,
             "cooling_device": 11,
-            "heating_device": 11
+            "heating_device": 11,
+            "cooling_or_heating_device": 21
         })
 
         attend_heads = kwargs.pop('attend_heads', 1)
@@ -412,29 +416,82 @@ class AAC_MADRL(RLC):
         hard_update(self.target_critic, self.critic)
         self.critic_optimizer = Adam(self.critic.parameters(), lr=self.lr, weight_decay=1e-3)
     
-    def save_models(self, directory: str = 'maac_param_net'):
-        print('.... saving models ....')
+    def save_models(self, zip_path: str = "maac.zip", dtype: Optional[str] = None) -> str:
+        """
+        Salva SOLO uno ZIP contenente:
+        - mean_std/config.json (statistiche di normalizzazione)
+        - policy_net_i.pt e target_policy_net_i.pt per ogni azione
+        - critic.pt e target_critic.pt
 
-        root = Path(directory)
-        mean_std_dir = root / "mean_std"
-        mean_std_dir.mkdir(parents=True, exist_ok=True)
+        Parametri
+        ---------
+        zip_path : str
+            Percorso del file .zip da creare.
+        dtype : Optional[str]
+            'fp16' o 'bf16' per ridurre dimensione (cast dei tensori floating).
+            'fp32' o None per mantenere il dtype originale.
+        """
+        
 
-        # salva mean/std
-        params = {"mean": [arr.tolist() for arr in self.norm_mean],
-                "std": [arr.tolist() for arr in self.norm_std]}
-        with open(mean_std_dir / "config.py", "w") as f:
-            f.write(f'params = {params}\n')
+        def _to_torch_dtype(d):
+            if d is None: return None
+            d = d.lower()
+            if d in ("fp16", "float16"):   return torch.float16
+            if d in ("bf16", "bfloat16"):  return torch.bfloat16
+            if d in ("fp32", "float32"):   return torch.float32
+            raise ValueError("dtype non supportato: %s" % d)
 
-        # policy + target
-        for i in range(len(self.action_dimension)):
-            torch.save(self.policy_net[i].state_dict(), root / f'policy_net_{i}.pt')
-            torch.save(self.target_policy_net[i].state_dict(), root / f'target_policy_net_{i}.pt')
+        tgt_dtype = _to_torch_dtype(dtype)
 
-        # critici
-        torch.save(self.critic.state_dict(), root / "critic.pt")
-        torch.save(self.target_critic.state_dict(), root / "target_critic.pt")
+        print(".... saving MAAC models to ZIP ....")
+        zip_path = Path(zip_path)
+        zip_path.parent.mkdir(parents=True, exist_ok=True)
 
-        print('.... models saved ....')   
+        with tempfile.TemporaryDirectory() as tmp:
+            out_dir = Path(tmp)
+
+            # 1) mean/std -> JSON portabile
+            ms_dir = out_dir / "mean_std"
+            ms_dir.mkdir(parents=True, exist_ok=True)
+            params = {
+                "mean": [np.asarray(arr).tolist() for arr in getattr(self, "norm_mean", [])],
+                "std":  [np.asarray(arr).tolist() for arr in getattr(self, "norm_std", [])],
+            }
+            (ms_dir / "config.json").write_text(json.dumps(params, indent=2))
+
+            # 2) helper cast
+            def _cast(sd):
+                if tgt_dtype is None: 
+                    return sd
+                return {k: (v.to(tgt_dtype) if torch.is_floating_point(v) else v)
+                        for k, v in sd.items()}
+
+            # 3) policy + target (per azione)
+            if hasattr(self, "policy_net"):
+                n = len(self.policy_net)
+            elif hasattr(self, "action_dimension"):
+                n = len(self.action_dimension)
+            else:
+                raise RuntimeError("Impossibile determinare il numero di policy da salvare.")
+
+            for i in range(n):
+                # policy i
+                torch.save(_cast(self.policy_net[i].state_dict()), out_dir / f"policy_net_{i}.pt")
+                # target policy i
+                torch.save(_cast(self.target_policy_net[i].state_dict()), out_dir / f"target_policy_net_{i}.pt")
+
+            # 4) critici (centrali)
+            torch.save(_cast(self.critic.state_dict()),         out_dir / "critic.pt")
+            torch.save(_cast(self.target_critic.state_dict()),  out_dir / "target_critic.pt")
+
+            # 5) crea zip finale
+            with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+                for f in out_dir.rglob("*"):
+                    if f.is_file(): 
+                        zf.write(f, f.relative_to(out_dir))
+
+        print(f".... AAC-MADRL models saved in ZIP: {zip_path} ....")
+        return str(zip_path)
     """
     def save_models(self, directory: str = 'maac_param_net'):
         print('.... saving models ....')
@@ -492,7 +549,7 @@ class AAC_MADRL(RLC):
         return actions
 
     def update(self, observations: List[List[float]], actions: List[List[float]], reward: List[float],
-               next_observations: List[List[float]], done: bool):
+               next_observations: List[List[float]], terminated: bool, truncated: bool):
         r"""Update replay buffer.
 
         Parameters
@@ -512,7 +569,7 @@ class AAC_MADRL(RLC):
         # Run once the regression model has been fitted
         # Normalize all the observations using periodical normalization, one-hot encoding, or -1, 1 scaling. It also removes observations that are not necessary (solar irradiance if there are no solar PV panels).
 
-        self.update_buffer(observations, actions, reward, next_observations, done)
+        self.update_buffer(observations, actions, reward, next_observations, terminated)
         for _ in range(self.update_per_time_step):
             full_buffer_agents = 0
             all_obs, all_acs, all_rews, all_next_obs, all_done = [], [], [], [], []
@@ -529,12 +586,12 @@ class AAC_MADRL(RLC):
                     #rews = tensor(r).unsqueeze(1).to(self.device)
                     rews = torch.tensor(r, device=self.device).unsqueeze(1)
                     #done = tensor(d).unsqueeze(1).to(self.device)
-                    done = torch.tensor(d, device=self.device).unsqueeze(1)
+                    terminated = torch.tensor(d, device=self.device).unsqueeze(1)
                     all_obs.append(obs)
                     all_acs.append(actions_list)
                     all_rews.append(rews)
                     all_next_obs.append(next_obs)
-                    all_done.append(done)
+                    all_done.append(terminated)
                     full_buffer_agents += 1
 
             if full_buffer_agents == self.nagents:
