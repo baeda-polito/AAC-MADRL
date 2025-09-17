@@ -581,7 +581,7 @@ class AAC_MADRL(RLC):
                     obs = torch.tensor(o, device=self.device)
                     #next_obs = tensor(n).to(self.device)
                     next_obs = torch.tensor(n, device=self.device)
-                    a_discrete = self.discretize_actions(a)
+                    a_discrete = self.discretize_actions(a, agent=agent)
                     actions_list = [torch.tensor(np.array([item[i] for item in a_discrete]), dtype=torch.float32).to(self.device) for i in range(self.action_dimension[agent])]
                     #rews = tensor(r).unsqueeze(1).to(self.device)
                     rews = torch.tensor(r, device=self.device).unsqueeze(1)
@@ -613,13 +613,13 @@ class AAC_MADRL(RLC):
             result = self.policy_net[i](o, self.action_dim[i], sample=not deterministic)
             actions.append(result)
         # MAKING  DISCRETE TO CONTINUOUS
-        acs = self.make_continuous(actions, list(self.defined_actions.values()))
+        acs = self.make_continuous(actions, self.defined_actions)
         return acs
 
     def get_exploration_prediction(self, observations: List[List[float]]) -> List[List[float]]:
         """Return randomly sampled actions from `action_space` multiplied by :attr:`action_scaling_coefficient`."""
         sampled_actions = [list(self.action_scaling_coefficient * s.sample()) for s in self.action_space]
-        effective_actions = self.make_continuous(self.discretize_actions(sampled_actions), list(self.defined_actions.values()))
+        effective_actions = self.make_continuous(self.discretize_actions(sampled_actions), self.defined_actions)
         return effective_actions
 
     def get_encoded_observations(self, index: int, observations: List[float]) -> npt.NDArray[np.float64]:
@@ -746,19 +746,49 @@ class AAC_MADRL(RLC):
         for a in range(self.nagents):
             soft_update(self.target_policy_net[a], self.policy_net[a], self.tau)
 
-    def discretize_actions(self, acs):
+    def discretize_actions(self, acs, agent: Optional[int] = None):
         """
         Discretize actions
         """
+        if agent is not None:
+            keys = self.action_names[agent]
+            bins_agent = [
+                (np.append(np.arange(0, 1, 1/self.classes[k]), 1)
+                if k in ('cooling_device', 'heating_device')
+                else np.append(np.arange(-1, 1, 2/self.classes[k]), 1))
+                for k in keys
+            ]
 
-        bins = [np.append(np.arange(0, 1, 1 / self.classes[key]), 1) if key in ['cooling_device', 'heating_device'] 
-            else np.append(np.arange(-1, 1, 2 / self.classes[key]), 1) 
-            for key in self.classes]
+            arr = np.atleast_2d(acs)  # shape: (batch, n_azioni)
+            digitized = [
+                [np.digitize(x, bins_agent[j], right=True) for j, x in enumerate(row)]
+                for row in arr
+            ]
+            one_hot = [
+                [np.eye(self.classes[k])[int(idx)-1] for idx, k in zip(row, keys)]
+                for row in digitized
+            ]
+            return one_hot
+        bins = [
+        [
+            (np.append(np.arange(0, 1, 1 / self.classes[key]), 1)
+             if key in ['cooling_device', 'heating_device']
+             else np.append(np.arange(-1, 1, 2 / self.classes[key]), 1))
+            for key in self.action_names[agent]
+        ]
+        for agent in range(self.nagents)
+        ]
+        digitized = [
+            [np.digitize(ac, bins_agent[j], right=True) for j, ac in enumerate(agent_acs)]
+            for bins_agent, agent_acs in zip(bins, acs)
+        ]
 
-        digitized = [[np.digitize(ac, bins[j], right=True) for j, ac in enumerate(agent_acs)] for agent_acs in acs]
-
-        one_hot_list = [[np.eye(self.num_classes[j])[(digitized_ac-1).astype(int)] for j, digitized_ac in enumerate(agent_digitized)] 
-                    for agent_digitized in digitized]
+        num_classes_per_agent = [
+        [self.classes[key] for key in self.action_names[agent]]
+        for agent in range(self.nagents)
+    ]
+        one_hot_list = [[np.eye(num_classes_per_agent[agent][j])[(digitized_ac-1).astype(int)] for j, digitized_ac in enumerate(agent_digitized)] 
+                    for agent, agent_digitized in enumerate(digitized)]
 
         return one_hot_list
 
@@ -766,7 +796,16 @@ class AAC_MADRL(RLC):
         """
         Convert one-hot encoded actions back to their original form
         """
-        continuous_actions = [[defined_actions[j][np.argmax(ac.cpu().numpy() if torch.is_tensor(ac) else ac)] for j, ac in enumerate(agent_acs)] for agent_acs in acs]
+        continuous_actions = []
+        for agent, agent_acs in enumerate(acs):
+            agent_vals = []
+            for j, ac in enumerate(agent_acs):
+                key = self.action_names[agent][j]
+                idx = np.argmax(ac.cpu().numpy() if torch.is_tensor(ac) else ac)
+                agent_vals.append(defined_actions[key][idx])
+            continuous_actions.append(agent_vals)
+        #continuous_actions = [[defined_actions[j][np.argmax(ac.cpu().numpy() if torch.is_tensor(ac) else ac)] 
+                               #for j, ac in enumerate(agent_acs)] for agent_acs in acs]
         return continuous_actions
 
     def update_buffer(self, observations, actions, reward, next_observations, done):

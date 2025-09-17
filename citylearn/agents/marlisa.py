@@ -4,6 +4,7 @@ import numpy as np
 from citylearn.agents.rbc import RBC
 from citylearn.agents.sac import SACRBC
 from citylearn.citylearn import CityLearnEnv
+from typing import Optional
 
 try:
     from sklearn.decomposition import PCA
@@ -468,6 +469,106 @@ class MARLISA(SAC):
         self.__coordination_variables_history = [
             [[0.0]*self.__COORDINATION_VARIABLE_COUNT for _ in self.action_dimension] for _ in range(2)
         ]
+
+
+    def save_models(self, zip_path: str = "marlisa.zip", dtype: Optional[str] = None) -> str:
+        """
+        Salva SOLO uno ZIP contenente:
+        - pca_i.pkl per ogni PCA in self.pca
+        - mean_std/config.json (statistiche di normalizzazione)
+        - soft_q_net1_i.pt, soft_q_net2_i.pt, target_soft_q_net1_i.pt, target_soft_q_net2_i.pt, policy_net_i.pt
+        - state_estimator_i.pkl se presente
+
+        Parametri
+        ---------
+        zip_path : str
+            Percorso del file .zip da creare.
+        dtype : Optional[str]
+            'fp16' o 'bf16' per ridurre dimensione (cast dei tensori floating).
+            'fp32' o None per mantenere il dtype originale.
+        """
+        import json, zipfile, tempfile
+        from pathlib import Path
+        import numpy as np
+        import torch, joblib
+
+        def _to_torch_dtype(d):
+            if d is None: return None
+            d = d.lower()
+            if d in ("fp16", "float16"):   return torch.float16
+            if d in ("bf16", "bfloat16"):  return torch.bfloat16
+            if d in ("fp32", "float32"):   return torch.float32
+            raise ValueError("dtype non supportato: %s" % d)
+
+        tgt_dtype = _to_torch_dtype(dtype)
+        zip_path = Path(zip_path)
+        zip_path.parent.mkdir(parents=True, exist_ok=True)
+
+        print(".... SAVING MARLISA (ZIP), mean and std ....")
+
+        with tempfile.TemporaryDirectory() as tmp:
+            out_dir = Path(tmp)
+
+            # 1) PCA
+            pca_list = list(getattr(self, "pca", []))
+            for i, pca in enumerate(pca_list):
+                joblib.dump(pca, out_dir / f"pca_{i}.pkl")
+
+            # 2) mean/std -> JSON portabile
+            ms_dir = out_dir / "mean_std"
+            ms_dir.mkdir(parents=True, exist_ok=True)
+            params = {
+                "mean": [np.asarray(arr).tolist() for arr in getattr(self, "norm_mean", [])],
+                "std":  [np.asarray(arr).tolist() for arr in getattr(self, "norm_std", [])],
+            }
+            (ms_dir / "config.json").write_text(json.dumps(params, indent=2))
+
+            # helper cast tensori
+            def _cast(sd):
+                if tgt_dtype is None: 
+                    return sd
+                return {k: (v.to(tgt_dtype) if torch.is_floating_point(v) else v)
+                        for k, v in sd.items()}
+
+            # 3) reti neurali e state estimators
+            # prova a dedurre quante teste/azioni
+            if hasattr(self, "policy_net"):
+                n = len(self.policy_net)
+            elif hasattr(self, "action_dimension"):
+                n = len(self.action_dimension)
+            else:
+                raise RuntimeError("Impossibile determinare il numero di azioni/reti da salvare.")
+
+            # liste opzionali
+            soft_q_net1 = getattr(self, "soft_q_net1", None)
+            soft_q_net2 = getattr(self, "soft_q_net2", None)
+            target_soft_q_net1 = getattr(self, "target_soft_q_net1", None)
+            target_soft_q_net2 = getattr(self, "target_soft_q_net2", None)
+            policy_net = getattr(self, "policy_net", None)
+            state_estimators = getattr(self, "state_estimator", None)
+
+            for i in range(n):
+                if soft_q_net1 is not None and len(soft_q_net1) > i:
+                    torch.save(_cast(soft_q_net1[i].state_dict()), out_dir / f"soft_q_net1_{i}.pt")
+                if soft_q_net2 is not None and len(soft_q_net2) > i:
+                    torch.save(_cast(soft_q_net2[i].state_dict()), out_dir / f"soft_q_net2_{i}.pt")
+                if target_soft_q_net1 is not None and len(target_soft_q_net1) > i:
+                    torch.save(_cast(target_soft_q_net1[i].state_dict()), out_dir / f"target_soft_q_net1_{i}.pt")
+                if target_soft_q_net2 is not None and len(target_soft_q_net2) > i:
+                    torch.save(_cast(target_soft_q_net2[i].state_dict()), out_dir / f"target_soft_q_net2_{i}.pt")
+                if policy_net is not None and len(policy_net) > i:
+                    torch.save(_cast(policy_net[i].state_dict()), out_dir / f"policy_net_{i}.pt")
+                if state_estimators is not None and len(state_estimators) > i:
+                    joblib.dump(state_estimators[i], out_dir / f"state_estimator_{i}.pkl")
+
+            # 4) crea ZIP
+            with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+                for f in out_dir.rglob("*"):
+                    if f.is_file():
+                        zf.write(f, f.relative_to(out_dir))
+
+        print(f".... MARLISA models saved in ZIP: {zip_path} ....")
+        return str(zip_path)
 
 class MARLISARBC(MARLISA, SACRBC):
     r"""Uses :py:class:`citylearn.agents.rbc.RBC` to select action during exploration before using :py:class:`citylearn.agents.marlisa.MARLISA`.
