@@ -11,7 +11,7 @@ import numpy as np
 import torch
 import numpy as np
 import numpy.typing as npt
-
+import re
 from itertools import chain
 
 from citylearn.citylearn import CityLearnEnv
@@ -505,7 +505,7 @@ class AAC_MADRL(RLC):
         torch.save(self.critic.state_dict(), f'{directory}/critic.pt')
         torch.save(self.target_critic.state_dict(), f'{directory}/target_critic.pt')
         print('.... models saved ....')
-    """
+    
     def load_models(self, directory: str = 'maac_param_net'):
         print('.... loading models ....')
                       
@@ -515,7 +515,140 @@ class AAC_MADRL(RLC):
         self.critic.load_state_dict(torch.load(f'{directory}/critic.pt', map_location=torch.device('cpu')))
         self.target_critic.load_state_dict(torch.load(f'{directory}/target_critic.pt', map_location=torch.device('cpu')))
         print('.... models loaded ....')
-    
+    """
+
+    def load_models(self,
+                    zip_path: str,
+                    map_location: Optional[str] = None,
+                    cast_to: Optional[str] = None,
+                    strict: bool = True) -> None:
+        """
+        Carica pesi e normalizzazioni da uno ZIP creato da save_models() di AAC-MADRL.
+
+        Parametri
+        ---------
+        zip_path : str
+            Percorso allo zip (es. '.../aac_madrl.zip' o '.../maac.zip').
+        map_location : Optional[str]
+            'cpu', 'cuda', o torch.device (passato a torch.load).
+        cast_to : Optional[str]
+            Se 'fp16'/'bf16'/'fp32', forza il cast dei tensori floating del checkpoint
+            prima del load (utile se i pesi sono stati salvati in un dtype diverso).
+            Se None, prova ad allineare automaticamente al dtype del modulo di destinazione.
+        strict : bool
+            Passato a module.load_state_dict. Metti False se ci sono key extra/mancanti.
+        """
+        import json, zipfile, tempfile
+        from pathlib import Path
+        import numpy as np
+        import torch
+
+        def _to_torch_dtype(d: Optional[str]):
+            if d is None: return None
+            d = d.lower()
+            if d in ("fp16", "float16"):   return torch.float16
+            if d in ("bf16", "bfloat16"):  return torch.bfloat16
+            if d in ("fp32", "float32"):   return torch.float32
+            raise ValueError("dtype non supportato: %s" % d)
+
+        tgt_dtype = _to_torch_dtype(cast_to)
+
+        zp = Path(zip_path)
+        if not zp.exists():
+            raise FileNotFoundError(f"Zip non trovato: {zp}")
+
+        print(f".... loading AAC-MADRL from ZIP: {zp} ....")
+
+        # Estrai lo zip in una cartella temporanea
+        with tempfile.TemporaryDirectory() as td:
+            with zipfile.ZipFile(zp, "r") as zf:
+                zf.extractall(td)
+            tmp = Path(td)
+
+            # 1) mean/std
+            ms = tmp / "mean_std" / "config.json"
+            if ms.exists():
+                params = json.loads(ms.read_text())
+                self.norm_mean = [np.asarray(x) for x in params.get("mean", [])]
+                self.norm_std  = [np.asarray(x) for x in params.get("std",  [])]
+            else:
+                print("[warn] mean_std/config.json non trovato: salto normalizzazioni.")
+
+            # 2) deduci quanti head/azioni caricare
+            #    priorità: struttura dell'istanza → file presenti
+            if hasattr(self, "policy_net"):
+                n_heads = len(self.policy_net)
+            elif hasattr(self, "action_dimension"):
+                n_heads = len(self.action_dimension)
+            else:
+                # deduci dai file policy_net_<i>.pt
+                rx = re.compile(r"policy_net_(\d+)\.pt")
+                idx = [int(m.group(1)) for p in tmp.rglob("policy_net_*.pt") if (m := rx.fullmatch(p.name))]
+                if not idx:
+                    raise RuntimeError("Impossibile dedurre il numero di policy da caricare (manca policy_net_*.pt).")
+                n_heads = max(idx) + 1
+
+            # 3) helper cast/load
+            def _cast_state(sd, module):
+                # Se richiesto, forza il dtype target
+                if tgt_dtype is not None:
+                    return {k: (v.to(tgt_dtype) if torch.is_floating_point(v) else v) for k, v in sd.items()}
+                # Altrimenti allinea al dtype del modulo
+                try:
+                    target_dtype = next(module.parameters()).dtype
+                    return {k: (v.to(target_dtype) if torch.is_floating_point(v) and v.dtype != target_dtype else v)
+                            for k, v in sd.items()}
+                except StopIteration:
+                    return sd  # modulo senza parametri
+
+            def _load_into(module, ckpt_path: Path):
+                sd = torch.load(ckpt_path, map_location=map_location)
+                sd = _cast_state(sd, module)
+                module.load_state_dict(sd, strict=strict)
+
+            # 4) policy + target policy per head
+            for i in range(n_heads):
+                # policy
+                p = tmp / f"policy_net_{i}.pt"
+                if hasattr(self, "policy_net") and len(self.policy_net) > i and p.exists():
+                    _load_into(self.policy_net[i], p)
+                else:
+                    if not p.exists():
+                        print(f"[warn] file mancante: {p}")
+                    else:
+                        print(f"[warn] policy_net[{i}] non esiste nell'istanza: salto.")
+
+                # target policy
+                tp = tmp / f"target_policy_net_{i}.pt"
+                if hasattr(self, "target_policy_net") and len(self.target_policy_net) > i and tp.exists():
+                    _load_into(self.target_policy_net[i], tp)
+                else:
+                    if not tp.exists():
+                        print(f"[warn] file mancante: {tp}")
+                    else:
+                        print(f"[warn] target_policy_net[{i}] non esiste nell'istanza: salto.")
+
+            # 5) critic e target_critic (globali)
+            c = tmp / "critic.pt"
+            if hasattr(self, "critic") and c.exists():
+                _load_into(self.critic, c)
+            else:
+                if not c.exists():
+                    print("[warn] critic.pt non trovato.")
+                else:
+                    print("[warn] self.critic non presente: salto.")
+
+            tc = tmp / "target_critic.pt"
+            if hasattr(self, "target_critic") and tc.exists():
+                _load_into(self.target_critic, tc)
+            else:
+                if not tc.exists():
+                    print("[warn] target_critic.pt non trovato.")
+                else:
+                    print("[warn] self.target_critic non presente: salto.")
+
+        print(".... AAC-MADRL models loaded ✓")
+
 
     def predict(self, observations: List[List[float]], deterministic: bool = None):
         r"""Provide actions for current time step.

@@ -50,7 +50,7 @@ class ComfortConsumptionDistrictRewardFixed(RewardFunction):
         district_net = sum(nets)
         district = -(district_net ** 2)
         n_agents = len(observations)
-        district = district / n_agents 
+        district = district / (n_agents **3.5)
         rewards = [(1.0 - self.beta) * (comforts[i] + consumptions[i]) + self.beta * district
                    for i in range(n_agents)]
 

@@ -58,7 +58,7 @@ def parse_args():
     # NUOVE OPZIONI: classi richieste dal modello
     p.add_argument("--dhw-storage", default=11, type=int, help="Numero di classi per azione DHW storage.")
     p.add_argument("--electrical-storage", default=11, type=int, help="Numero di classi per azione electrical storage.")
-    p.add_argument("--cooling-or-heating-device", default=11, type=int, help="Numero di classi per azione cooling/heating device.")
+    p.add_argument("--cooling-or-heating-device", default=21, type=int, help="Numero di classi per azione cooling/heating device.")
     p.add_argument("--cooling-device", default=11, type=int, help="Numero di classi per azione cooling device.")
     p.add_argument("--heating-device", default=11, type=int, help="Numero di classi per azione heating device.")
     # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

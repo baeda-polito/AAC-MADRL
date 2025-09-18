@@ -1,0 +1,42 @@
+{
+  "os": "Windows-10-10.0.26100-SP0",
+  "python": "CPython 3.9.0",
+  "startedAt": "2025-09-18T05:59:46.478840Z",
+  "args": [
+    "--lr=0.001",
+    "--episodes=10",
+    "--sim-start=3624",
+    "--sim-end=4343",
+    "--beta=0.5",
+    "--wandb",
+    "on",
+    "--wandb-project=TEST_DYNAMICS",
+    "--wandb-run-name=aac_medrl_lr=0.001_gamma=3.5",
+    "--dhw-storage=21",
+    "--electrical-storage=21",
+    "--cooling-or-heating-device=21"
+  ],
+  "program": "C:\\Users\\sabry\\Documents\\Citylearn_dinamics\\train_aac_madrl.py",
+  "codePath": "train_aac_madrl.py",
+  "codePathLocal": "train_aac_madrl.py",
+  "git": {
+    "remote": "https://github.com/SabSav/Citylearn_dinamics.git",
+    "commit": "9edc5afb3a484dcd58b717200d624fed38beec1f"
+  },
+  "email": "sabrina.savino@polito.it",
+  "root": "C:\\Users\\sabry\\Documents\\Citylearn_dinamics",
+  "host": "Sabrina",
+  "executable": "c:\\Users\\sabry\\Documents\\Citylearn_dinamics\\.venv\\Scripts\\python.exe",
+  "cpu_count": 8,
+  "cpu_count_logical": 16,
+  "disk": {
+    "/": {
+      "total": "1022755860480",
+      "used": "822642065408"
+    }
+  },
+  "memory": {
+    "total": "16456073216"
+  },
+  "writerId": "g8ycoqy1b61csnvoot8p4c5p1gzgiwmv"
+}

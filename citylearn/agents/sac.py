@@ -6,6 +6,7 @@ import zipfile
 import tempfile
 import json
 from pathlib import Path
+import re
 try:
     import torch
     import torch.nn as nn
@@ -280,10 +281,6 @@ class SAC(RLC):
         - mean_std/config.json (statistiche normalizzazione)
         - pesi .pt di tutte le reti (soft_q_net1/2, target_*, policy)
         """
-        import json, zipfile, tempfile
-        from pathlib import Path
-        import numpy as np
-        import torch
 
         def _to_torch_dtype(d):
             if d is None: return None
@@ -340,7 +337,122 @@ class SAC(RLC):
         return str(zip_path)
 
 
+    def load_models(self,
+                zip_path: str,
+                map_location: Optional[str] = None,
+                cast_to: Optional[str] = None,
+                strict: bool = True) -> None:
+        """
+        Carica pesi e normalizzazioni da uno ZIP creato da `save_models`.
 
+        Parametri
+        ---------
+        zip_path : str
+            Percorso allo ZIP (es. '.../sac.zip').
+        map_location : Optional[str]
+            'cpu', 'cuda', o torch.device; passato a torch.load.
+        cast_to : Optional[str]
+            Se 'fp16'/'bf16'/'fp32', forza il cast dei tensori floating del checkpoint
+            PRIMA del load nello shape del modulo (utile se i pesi salvati sono fp16 ma il
+            modello è in fp32, o viceversa).
+        strict : bool
+            Passato a `module.load_state_dict`. Metti False se ci sono key extra/mancanti.
+        """
+
+        def _to_torch_dtype(d):
+            if d is None: return None
+            d = d.lower()
+            if d in ('fp16','float16'):  return torch.float16
+            if d in ('bf16','bfloat16'): return torch.bfloat16
+            if d in ('fp32','float32'):  return torch.float32
+            raise ValueError("dtype non supportato: %s" % d)
+
+        tgt_cast_dtype = _to_torch_dtype(cast_to)
+
+        zip_path = Path(zip_path)
+        if not zip_path.exists():
+            raise FileNotFoundError(f"ZIP non trovato: {zip_path}")
+
+        print(f".... loading models from ZIP: {zip_path} ....")
+
+        # Estrai in dir temporanea
+        with zipfile.ZipFile(zip_path, 'r') as zf, tempfile.TemporaryDirectory() as tmpdir:
+            zf.extractall(tmpdir)
+            tmp = Path(tmpdir)
+
+            # 1) mean/std
+            ms_file = tmp / 'mean_std' / 'config.json'
+            if ms_file.exists():
+                params = json.loads(ms_file.read_text())
+                self.norm_mean = [np.asarray(x) for x in params.get('mean', [])]
+                self.norm_std  = [np.asarray(x) for x in params.get('std',  [])]
+            else:
+                print("[warn] mean_std/config.json non trovato: salto normalizzazioni")
+
+            # 2) deduci indici presenti nello zip (policy come riferimento)
+            def _indices(pattern):
+                rx = re.compile(pattern)
+                idx = []
+                for p in tmp.rglob('*'):
+                    m = rx.fullmatch(p.name)
+                    if m:
+                        idx.append(int(m.group(1)))
+                return sorted(set(idx))
+
+            indices = _indices(r'policy_net_(\d+)\.pt')
+            if not indices:
+                # fallback: prova con soft_q_net1
+                indices = _indices(r'soft_q_net1_(\d+)\.pt')
+            if not indices:
+                raise RuntimeError("Impossibile dedurre gli head/azioni dal contenuto dello ZIP.")
+
+            # 3) helper di load con cast coerente
+            def _load_into(module, ckpt_path: Path):
+                sd = torch.load(ckpt_path, map_location=map_location)
+                # se richiesto, forza il cast dei tensori floating
+                if tgt_cast_dtype is not None:
+                    for k, v in sd.items():
+                        if torch.is_floating_point(v):
+                            sd[k] = v.to(dtype=tgt_cast_dtype)
+                else:
+                    # altrimenti, prova ad allineare al dtype del modulo (se noto)
+                    try:
+                        target_dtype = next(module.parameters()).dtype  # può alzare StopIteration
+                        for k, v in sd.items():
+                            if torch.is_floating_point(v) and v.dtype != target_dtype:
+                                sd[k] = v.to(dtype=target_dtype)
+                    except StopIteration:
+                        pass
+                module.load_state_dict(sd, strict=strict)
+
+            # 4) per ogni indice, carica i vari moduli se presenti nello zip e nell'istanza
+            def _maybe(module_list, i, fname):
+                if module_list is None or len(module_list) <= i:
+                    return False
+                p = tmp / fname
+                if p.exists():
+                    _load_into(module_list[i], p)
+                    return True
+                return False
+
+            # attributi opzionali (SAC-like)
+            soft_q_net1 = getattr(self, "soft_q_net1", None)
+            soft_q_net2 = getattr(self, "soft_q_net2", None)
+            target_soft_q_net1 = getattr(self, "target_soft_q_net1", None)
+            target_soft_q_net2 = getattr(self, "target_soft_q_net2", None)
+            policy_net = getattr(self, "policy_net", None)
+
+            for i in indices:
+                loaded_any = False
+                loaded_any |= _maybe(soft_q_net1,        i, f"soft_q_net1_{i}.pt")
+                loaded_any |= _maybe(soft_q_net2,        i, f"soft_q_net2_{i}.pt")
+                loaded_any |= _maybe(target_soft_q_net1, i, f"target_soft_q_net1_{i}.pt")
+                loaded_any |= _maybe(target_soft_q_net2, i, f"target_soft_q_net2_{i}.pt")
+                loaded_any |= _maybe(policy_net,         i, f"policy_net_{i}.pt")
+                if not loaded_any:
+                    print(f"[warn] nessun file di rete trovato per indice {i}")
+
+        print(".... models loaded ✓")
 
 class SACRBC(SAC):
     r"""Uses :py:class:`citylearn.agents.rbc.RBC` to select actions during exploration before using :py:class:`citylearn.agents.sac.SAC`.
