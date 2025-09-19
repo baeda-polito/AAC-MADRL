@@ -120,4 +120,4 @@ If you use this repository or reproduce the results, please cite:
 
 Savino S., Minella T., Nagy Z., Capozzoli A. (2025).
 A scalable demand-side energy management control strategy for large residential districts based on an attention-driven multi-agent DRL approach.
-Applied Energy.
+Applied Energy. [https://doi.org/10.1016/j.apenergy.2025.123456]
