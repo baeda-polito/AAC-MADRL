@@ -1,8 +1,0 @@
-# Ignore local experiment folders
-outputs/
-wandb/
-
-# Ignore Python cache and virtual env
-__pycache__/
-*.pyc
-.venv/
