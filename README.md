@@ -62,6 +62,26 @@ python scripts/train_sac.py \
   --sim-start 3624 --sim-end 4343 \
   --wandb off
 ```
+
+### Optional: Weights & Biases (wandb) Integration
+
+Training scripts support optional logging with [Weights & Biases](https://wandb.ai) for experiment tracking and visualization.
+
+- By default, wandb is disabled (`--wandb off`).
+- To enable it, provide your wandb project name:
+
+```bash
+# Example: run AAC-MADRL with wandb logging enabled
+python scripts/train_aac_madrl.py \
+  --dataset-name data/TX_10_dynamics/schema.json \
+  --episodes 12 --lr 1e-3 \
+  --dhw-storage 21 --electrical-storage 21 --cooling-or-heating-device 21 \
+  --sim-start 3624 --sim-end 4343 \
+  --wandb on \
+  --wandb-project name of yout project \
+  -- wandb-run-name name of youe run
+```
+
 ## Deployment
 ```bash
 python scripts/deploy_model.py \
