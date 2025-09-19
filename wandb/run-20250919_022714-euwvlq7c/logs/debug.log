@@ -9,3 +9,18 @@
 2025-09-19 02:27:14,588 INFO    MainThread:32396 [wandb_init.py:init():818] wandb.init called with sweep_config: {}
 config: {'dataset': 'C:\\Users\\sabry\\Documents\\Citylearn_dinamics\\data\\TX_50_dynamics\\schema.json', 'dataset_mode': 'local', 'central_agent': False, 'episodes': 10, 'lr': 0.001, 'beta': 0.0, 'output_root': 'C:\\Users\\sabry\\Documents\\Citylearn_dinamics\\outputs', 'zip_path': 'C:\\Users\\sabry\\Documents\\Citylearn_dinamics\\outputs\\TX_50_dynamics\\save_models\\aac_madrl\\beta=0.0_gamma=3.5\\lr=0.001\\aac_madrl.zip', 'data_dir': 'C:\\Users\\sabry\\.citylearn\\data', 'sim_start': 3624, 'sim_end': 4343, 'classes': {'dhw_storage': 21, 'electrical_storage': 21, 'cooling_or_heating_device': 21}, '_wandb': {}}
 2025-09-19 02:27:14,588 INFO    MainThread:32396 [wandb_init.py:init():854] starting backend
+2025-09-19 02:27:16,865 INFO    MainThread:32396 [wandb_init.py:init():857] sending inform_init request
+2025-09-19 02:27:16,873 INFO    MainThread:32396 [wandb_init.py:init():865] backend started and connected
+2025-09-19 02:27:16,878 INFO    MainThread:32396 [wandb_init.py:init():936] updated telemetry
+2025-09-19 02:27:16,977 INFO    MainThread:32396 [wandb_init.py:init():960] communicating run to backend with 90.0 second timeout
+2025-09-19 02:27:17,492 INFO    MainThread:32396 [wandb_init.py:init():1011] starting run threads in backend
+2025-09-19 02:27:17,707 INFO    MainThread:32396 [wandb_run.py:_console_start():2506] atexit reg
+2025-09-19 02:27:17,708 INFO    MainThread:32396 [wandb_run.py:_redirect():2354] redirect: wrap_raw
+2025-09-19 02:27:17,708 INFO    MainThread:32396 [wandb_run.py:_redirect():2423] Wrapping output streams.
+2025-09-19 02:27:17,709 INFO    MainThread:32396 [wandb_run.py:_redirect():2446] Redirects installed.
+2025-09-19 02:27:17,717 INFO    MainThread:32396 [wandb_init.py:init():1049] run started, returning control to user process
+2025-09-19 10:53:53,875 INFO    MainThread:32396 [wandb_run.py:_finish():2272] finishing run baeda/TEST_DYNAMICS/euwvlq7c
+2025-09-19 10:53:53,877 INFO    MainThread:32396 [wandb_run.py:_atexit_cleanup():2471] got exitcode: 0
+2025-09-19 10:53:53,879 INFO    MainThread:32396 [wandb_run.py:_restore():2453] restore
+2025-09-19 10:53:53,880 INFO    MainThread:32396 [wandb_run.py:_restore():2459] restore done
+2025-09-19 10:53:57,214 INFO    MainThread:32396 [wandb_run.py:_footer_sync_info():3867] logging synced files
