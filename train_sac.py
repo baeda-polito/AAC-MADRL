@@ -53,6 +53,7 @@ def parse_args():
     p.add_argument("--episodes", default=12, type=int, help="Episodi di training.")
     p.add_argument("--lr", default=3e-4, type=float, help="Learning rate.")
     p.add_argument("--beta", default=0.0, type=float, help="Valore beta (tenuto nei config/W&B).")
+    p.add_argument("--gamma", default=1, type=float, help="Valore gamma (tenuto nei config/W&B).")
 
     p.add_argument(
         "--output-root",
@@ -90,7 +91,7 @@ def maybe_init_wandb(args, config):
     if args.wandb == "off" or wandb is None:
         return None
     try:
-        run_name = args.wandb_run_name or f"sac_lr={args.lr}_beta={args.beta}"
+        run_name = args.wandb_run_name or f"sac_lr={args.lr}_beta={args.beta}_gamma={args.gamma}"
         run = wandb.init(
             project=args.wandb_project,
             entity=args.wandb_entity,
@@ -117,7 +118,7 @@ def main():
     output_root = args.output_root.resolve()
 
     # Path richiesto ESATTO: outputs/save_models/sac/beta/lr/sac.zip
-    save_dir = output_root / args.dataset_name / "save_models" / "sac" / "beta" / "lr"
+    save_dir = output_root / args.dataset_name / "save_models" / "sac" / f"beta={args.beta}_gamma={args.gamma}" / f"lr={args.lr}"
     save_dir.mkdir(parents=True, exist_ok=True)
     zip_file = save_dir / "sac.zip"
 
@@ -129,6 +130,7 @@ def main():
         "episodes": args.episodes,
         "lr": args.lr,
         "beta": args.beta,
+        "gamma": args.gamma,
         "output_root": str(output_root),
         "zip_path": str(zip_file),
         "data_dir": str(args.data_dir),
@@ -147,7 +149,15 @@ def main():
         env_kwargs["simulation_start_time_step"] = args.sim_start
     if args.sim_end is not None:
         env_kwargs["simulation_end_time_step"] = args.sim_end
+    reward_kwargs = {}
+    if args.beta is not None:
+        reward_kwargs["beta"] = args.beta
+    if args.gamma is not None:
+        reward_kwargs["gamma"] = args.gamma
 
+    # Passa le kwargs alla reward SOLO una volta
+    if reward_kwargs:
+        env_kwargs["reward_function_kwargs"] = reward_kwargs
     env = CityLearnEnv(dataset_arg, **env_kwargs)
     model = RLAgent(env, lr=args.lr)
 

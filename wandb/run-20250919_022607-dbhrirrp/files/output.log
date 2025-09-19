@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\train_aac_madrl.py", line 205, in <module>
+    main()
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\train_aac_madrl.py", line 188, in main
+    model.learn(episodes=args.episodes)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\agents\base.py", line 158, in learn
+    next_observations, rewards, terminated, truncated, _ = self.env.step(actions)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\citylearn.py", line 898, in step
+    reward_observations = [b.observations(include_all=True, normalize=False, periodic_normalization=False) for b in self.buildings]
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\citylearn.py", line 898, in <listcomp>
+    reward_observations = [b.observations(include_all=True, normalize=False, periodic_normalization=False) for b in self.buildings]
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\building.py", line 858, in observations
+    data = self._get_observations_data()
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\building.py", line 991, in _get_observations_data
+    'cooling_storage_electricity_consumption': self.cooling_storage_electricity_consumption[self.time_step],
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\building.py", line 403, in cooling_storage_electricity_consumption
+    return self.cooling_device.get_input_power(self.cooling_storage.energy_balance[:self.time_step + 1],
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\energy_model.py", line 301, in get_input_power
+    return output_power/self.get_cop(outdoor_dry_bulb_temperature, heating)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\energy_model.py", line 234, in get_cop
+    outdoor_dry_bulb_temperature = np.array(outdoor_dry_bulb_temperature)
+KeyboardInterrupt

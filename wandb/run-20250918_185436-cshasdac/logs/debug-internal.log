@@ -1,0 +1,6 @@
+{"time":"2025-09-18T18:54:38.5156381+02:00","level":"INFO","msg":"stream: starting","core version":"0.21.4"}
+{"time":"2025-09-18T18:54:38.8899236+02:00","level":"INFO","msg":"stream: created new stream","id":"cshasdac"}
+{"time":"2025-09-18T18:54:38.8907518+02:00","level":"INFO","msg":"stream: started","id":"cshasdac"}
+{"time":"2025-09-18T18:54:38.8907518+02:00","level":"INFO","msg":"sender: started","stream_id":"cshasdac"}
+{"time":"2025-09-18T18:54:38.8907518+02:00","level":"INFO","msg":"handler: started","stream_id":"cshasdac"}
+{"time":"2025-09-18T18:54:38.8907518+02:00","level":"INFO","msg":"writer: started","stream_id":"cshasdac"}

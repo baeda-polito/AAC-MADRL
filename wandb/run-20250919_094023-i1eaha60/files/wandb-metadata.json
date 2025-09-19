@@ -1,0 +1,40 @@
+{
+  "os": "Windows-10-10.0.26100-SP0",
+  "python": "CPython 3.9.0",
+  "startedAt": "2025-09-19T07:40:23.281923Z",
+  "args": [
+    "--beta=0",
+    "--episodes=10",
+    "--lr=0.001",
+    "--gamma=3.5",
+    "--wandb",
+    "on",
+    "--wandb-project",
+    "TEST_DYNAMICS",
+    "--wandb-run-name=50_sac_beta=0.5_gamma=3.5",
+    "--dataset-name=TX_50_dynamics"
+  ],
+  "program": "C:\\Users\\sabry\\Documents\\Citylearn_dinamics\\train_sac.py",
+  "codePath": "train_sac.py",
+  "codePathLocal": "train_sac.py",
+  "git": {
+    "remote": "https://github.com/SabSav/Citylearn_dinamics.git",
+    "commit": "b326e867efc3850c53cbaa4b2ae4cef7518b19c3"
+  },
+  "email": "sabrina.savino@polito.it",
+  "root": "C:\\Users\\sabry\\Documents\\Citylearn_dinamics",
+  "host": "Sabrina",
+  "executable": "c:\\Users\\sabry\\Documents\\Citylearn_dinamics\\.venv\\Scripts\\python.exe",
+  "cpu_count": 8,
+  "cpu_count_logical": 16,
+  "disk": {
+    "/": {
+      "total": "1022755860480",
+      "used": "782103740416"
+    }
+  },
+  "memory": {
+    "total": "16456073216"
+  },
+  "writerId": "1rl8c3xzemgko874r875x1oohm5c16ez"
+}

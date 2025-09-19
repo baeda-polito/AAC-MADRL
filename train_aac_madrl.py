@@ -53,11 +53,12 @@ def parse_args():
     p.add_argument("--episodes", default=12, type=int, help="Episodi di training.")
     p.add_argument("--lr", default=3e-4, type=float, help="Learning rate.")
     p.add_argument("--beta", default=0.0, type=float, help="Valore beta (tenuto nei config/W&B).")
+    p.add_argument("--gamma", default=1, type=float, help="Valore gamma (tenuto nei config/W&B).")
 
     # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     # NUOVE OPZIONI: classi richieste dal modello
-    p.add_argument("--dhw-storage", default=11, type=int, help="Numero di classi per azione DHW storage.")
-    p.add_argument("--electrical-storage", default=11, type=int, help="Numero di classi per azione electrical storage.")
+    p.add_argument("--dhw-storage", default=21, type=int, help="Numero di classi per azione DHW storage.")
+    p.add_argument("--electrical-storage", default=21, type=int, help="Numero di classi per azione electrical storage.")
     p.add_argument("--cooling-or-heating-device", default=21, type=int, help="Numero di classi per azione cooling/heating device.")
     p.add_argument("--cooling-device", default=11, type=int, help="Numero di classi per azione cooling device.")
     p.add_argument("--heating-device", default=11, type=int, help="Numero di classi per azione heating device.")
@@ -99,7 +100,7 @@ def maybe_init_wandb(args, config):
     if args.wandb == "off" or wandb is None:
         return None
     try:
-        run_name = args.wandb_run_name or f"AAC-MADRL_lr={args.lr}_beta={args.beta}"
+        run_name = args.wandb_run_name or f"aac-madrl_lr={args.lr}_beta={args.beta}_gamma={args.gamma}"
         run = wandb.init(
             project=args.wandb_project,
             entity=args.wandb_entity,
@@ -126,9 +127,9 @@ def main():
     output_root = args.output_root.resolve()
 
     # Path richiesto ESATTO: outputs/save_models/AAC-MADRL/beta/lr/AAC-MADRL.zip
-    save_dir = output_root / args.dataset_name / "save_models" / "AAC-MADRL" / "beta" / "lr"
+    save_dir = output_root / args.dataset_name / "save_models" / "aac_madrl" / f"beta={args.beta}_gamma={args.gamma}" / f"lr={args.lr}"
     save_dir.mkdir(parents=True, exist_ok=True)
-    zip_file = save_dir / "AAC-MADRL.zip"
+    zip_file = save_dir / "aac_madrl.zip"
 
     # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     # Costruisci il dizionario delle classi da passare al modello
@@ -168,6 +169,13 @@ def main():
         env_kwargs["simulation_start_time_step"] = args.sim_start
     if args.sim_end is not None:
         env_kwargs["simulation_end_time_step"] = args.sim_end
+    reward_kwargs = {}
+    if args.beta is not None:
+        reward_kwargs["beta"] = args.beta
+    if args.gamma is not None:
+        reward_kwargs["gamma"] = args.gamma
+    if reward_kwargs:
+        env_kwargs["reward_function_kwargs"] = reward_kwargs
 
     env = CityLearnEnv(dataset_arg, **env_kwargs)
 

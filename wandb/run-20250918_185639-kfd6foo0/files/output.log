@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\train_aac_madrl.py", line 205, in <module>
+    main()
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\train_aac_madrl.py", line 188, in main
+    model.learn(episodes=args.episodes)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\agents\base.py", line 158, in learn
+    next_observations, rewards, terminated, truncated, _ = self.env.step(actions)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\citylearn.py", line 888, in step
+    building.apply_actions(**building_actions)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\building.py", line 2246, in apply_actions
+    super().apply_actions(**kwargs)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\building.py", line 1139, in apply_actions
+    func(*args)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\building.py", line 1157, in update_energy_from_cooling_device
+    max_electric_power = self.downward_electrical_flexibility
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\building.py", line 626, in downward_electrical_flexibility
+    message = 'downward_electrical_flexibility must be >= 0.0!' \
+KeyboardInterrupt

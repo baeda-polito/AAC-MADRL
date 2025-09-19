@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\train_aac_madrl.py", line 205, in <module>
+    main()
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\train_aac_madrl.py", line 188, in main
+    model.learn(episodes=args.episodes)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\agents\base.py", line 163, in learn
+    self.update(observations, actions, rewards, next_observations, terminated=terminated, truncated=truncated)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\agents\aac_madrl.py", line 718, in update
+    actions_list = [torch.tensor(np.array([item[i] for item in a_discrete]), dtype=torch.float32).to(self.device) for i in range(self.action_dimension[agent])]
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\agents\aac_madrl.py", line 718, in <listcomp>
+    actions_list = [torch.tensor(np.array([item[i] for item in a_discrete]), dtype=torch.float32).to(self.device) for i in range(self.action_dimension[agent])]
+KeyboardInterrupt

@@ -1,0 +1,17 @@
+{"time":"2025-09-18T16:00:17.5965104+02:00","level":"INFO","msg":"stream: starting","core version":"0.21.4"}
+{"time":"2025-09-18T16:00:18.3415804+02:00","level":"INFO","msg":"stream: created new stream","id":"o7ux41q1"}
+{"time":"2025-09-18T16:00:18.3420955+02:00","level":"INFO","msg":"stream: started","id":"o7ux41q1"}
+{"time":"2025-09-18T16:00:18.3420955+02:00","level":"INFO","msg":"handler: started","stream_id":"o7ux41q1"}
+{"time":"2025-09-18T16:00:18.3420955+02:00","level":"INFO","msg":"writer: started","stream_id":"o7ux41q1"}
+{"time":"2025-09-18T16:00:18.3420955+02:00","level":"INFO","msg":"sender: started","stream_id":"o7ux41q1"}
+{"time":"2025-09-18T17:05:51.7399072+02:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": net/http: request canceled (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2025-09-18T17:52:30.3012053+02:00","level":"ERROR","msg":"runconsolelogs: failed to write to file: failed to open file: open C:\\Users\\sabry\\Documents\\Citylearn_dinamics\\wandb\\run-20250918_160014-o7ux41q1\\files\\output.log: The system cannot find the path specified."}
+{"time":"2025-09-18T17:52:31.3265385+02:00","level":"ERROR","msg":"sender: failed to upload run summary: open C:\\Users\\sabry\\Documents\\Citylearn_dinamics\\wandb\\run-20250918_160014-o7ux41q1\\files\\wandb-summary.json: The system cannot find the path specified."}
+{"time":"2025-09-18T17:52:31.328691+02:00","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"updating run metadata","runtime_seconds":0.0092368}],"total_operations":1}}
+{"time":"2025-09-18T17:52:31.3760508+02:00","level":"WARN","msg":"runfiles: upload: file does not exist","path":"C:\\Users\\sabry\\Documents\\Citylearn_dinamics\\wandb\\run-20250918_160014-o7ux41q1\\files\\output.log"}
+{"time":"2025-09-18T17:52:31.4971476+02:00","level":"ERROR","msg":"sender: failed to upload run config: open C:\\Users\\sabry\\Documents\\Citylearn_dinamics\\wandb\\run-20250918_160014-o7ux41q1\\files\\config.yaml: The system cannot find the path specified."}
+{"time":"2025-09-18T17:52:31.5481048+02:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-09-18T17:52:31.8309508+02:00","level":"INFO","msg":"stream: closing","id":"o7ux41q1"}
+{"time":"2025-09-18T17:52:31.8309508+02:00","level":"INFO","msg":"handler: closed","stream_id":"o7ux41q1"}
+{"time":"2025-09-18T17:52:31.8314671+02:00","level":"INFO","msg":"sender: closed","stream_id":"o7ux41q1"}
+{"time":"2025-09-18T17:52:31.8314671+02:00","level":"INFO","msg":"stream: closed","id":"o7ux41q1"}

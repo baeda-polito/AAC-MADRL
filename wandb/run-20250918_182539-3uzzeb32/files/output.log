@@ -1,0 +1,33 @@
+Traceback (most recent call last):
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\dynamics.py", line 118, in reset
+    self.load_state_dict(torch.load(self.filepath)['model_state_dict'])
+  File "c:\Users\sabry\Documents\Citylearn_dinamics\.venv\lib\site-packages\torch\serialization.py", line 1484, in load
+    with _open_file_like(f, "rb") as opened_file:
+  File "c:\Users\sabry\Documents\Citylearn_dinamics\.venv\lib\site-packages\torch\serialization.py", line 759, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+  File "c:\Users\sabry\Documents\Citylearn_dinamics\.venv\lib\site-packages\torch\serialization.py", line 740, in __init__
+    super().__init__(open(name, mode))
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\sabry\\Documents\\Citylearn_dinamics\\data\\TX_50_dynamics\\resstock-amy2018-2021-release-1-85296.pth'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\train_sac.py", line 182, in <module>
+    main()
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\train_sac.py", line 161, in main
+    env = CityLearnEnv(dataset_arg, **env_kwargs)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\citylearn.py", line 171, in __init__
+    self.reset()
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\citylearn.py", line 1215, in reset
+    building.reset()
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\building.py", line 2282, in reset
+    self.dynamics.reset()
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\dynamics.py", line 124, in reset
+    self.load_state_dict(torch.load(self.filepath))
+  File "c:\Users\sabry\Documents\Citylearn_dinamics\.venv\lib\site-packages\torch\serialization.py", line 1484, in load
+    with _open_file_like(f, "rb") as opened_file:
+  File "c:\Users\sabry\Documents\Citylearn_dinamics\.venv\lib\site-packages\torch\serialization.py", line 759, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+  File "c:\Users\sabry\Documents\Citylearn_dinamics\.venv\lib\site-packages\torch\serialization.py", line 740, in __init__
+    super().__init__(open(name, mode))
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\sabry\\Documents\\Citylearn_dinamics\\data\\TX_50_dynamics\\resstock-amy2018-2021-release-1-85296.pth'

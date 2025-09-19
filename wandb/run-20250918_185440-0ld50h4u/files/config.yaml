@@ -1,0 +1,92 @@
+_wandb:
+    value:
+        cli_version: 0.21.4
+        e:
+            v01054mx0c0yvg5y52jguhcuj79e00xg:
+                args:
+                    - --lr=0.001
+                    - --episodes=10
+                    - --sim-start=3624
+                    - --sim-end=4343
+                    - --wandb
+                    - "on"
+                    - --wandb-project
+                    - TEST_DYNAMICS
+                    - --beta=0
+                    - --gamma=2.8
+                    - --dhw-storage=21
+                    - --electrical-storage=21
+                    - --cooling-or-heating-device=21
+                    - --dataset-name=CA_10_dynamics
+                    - --wandb-run-name=CA_acc-madrl_beta=0_gamma=2.8_lr=0.001
+                codePath: train_aac_madrl.py
+                codePathLocal: train_aac_madrl.py
+                cpu_count: 8
+                cpu_count_logical: 16
+                disk:
+                    /:
+                        total: "1022755860480"
+                        used: "780849676288"
+                email: sabrina.savino@polito.it
+                executable: c:\Users\sabry\Documents\Citylearn_dinamics\.venv\Scripts\python.exe
+                git:
+                    commit: b326e867efc3850c53cbaa4b2ae4cef7518b19c3
+                    remote: https://github.com/SabSav/Citylearn_dinamics.git
+                host: Sabrina
+                memory:
+                    total: "16456073216"
+                os: Windows-10-10.0.26100-SP0
+                program: C:\Users\sabry\Documents\Citylearn_dinamics\train_aac_madrl.py
+                python: CPython 3.9.0
+                root: C:\Users\sabry\Documents\Citylearn_dinamics
+                startedAt: "2025-09-18T16:54:40.032706Z"
+                writerId: v01054mx0c0yvg5y52jguhcuj79e00xg
+        m: []
+        python_version: 3.9.0
+        t:
+            "1":
+                - 1
+                - 5
+                - 53
+            "2":
+                - 1
+                - 5
+                - 53
+            "3":
+                - 13
+                - 16
+            "4": 3.9.0
+            "5": 0.21.4
+            "8":
+                - 3
+            "10":
+                - 20
+            "12": 0.21.4
+            "13": windows-amd64
+beta:
+    value: 0
+central_agent:
+    value: false
+classes:
+    value:
+        cooling_or_heating_device: 21
+        dhw_storage: 21
+        electrical_storage: 21
+data_dir:
+    value: C:\Users\sabry\.citylearn\data
+dataset:
+    value: C:\Users\sabry\Documents\Citylearn_dinamics\data\CA_10_dynamics\schema.json
+dataset_mode:
+    value: local
+episodes:
+    value: 10
+lr:
+    value: 0.001
+output_root:
+    value: C:\Users\sabry\Documents\Citylearn_dinamics\outputs
+sim_end:
+    value: 4343
+sim_start:
+    value: 3624
+zip_path:
+    value: C:\Users\sabry\Documents\Citylearn_dinamics\outputs\CA_10_dynamics\save_models\aac_madrl\beta=0.0_gamma=2.8\lr=0.001\aac_madrl.zip

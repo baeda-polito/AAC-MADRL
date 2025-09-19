@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\train_aac_madrl.py", line 205, in <module>
+    main()
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\train_aac_madrl.py", line 188, in main
+    model.learn(episodes=args.episodes)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\agents\base.py", line 158, in learn
+    next_observations, rewards, terminated, truncated, _ = self.env.step(actions)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\citylearn.py", line 888, in step
+    building.apply_actions(**building_actions)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\building.py", line 2246, in apply_actions
+    super().apply_actions(**kwargs)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\building.py", line 1139, in apply_actions
+    func(*args)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\building.py", line 1254, in update_energy_from_dhw_device
+    storage_output = self.energy_from_dhw_storage[self.time_step]
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\building.py", line 511, in energy_from_dhw_storage
+    return self.dhw_storage.energy_balance.clip(max=0)[:self.time_step + 1] * -1
+  File "c:\Users\sabry\Documents\Citylearn_dinamics\.venv\lib\site-packages\numpy\core\_methods.py", line 95, in _clip
+    return um.minimum(a, max, out=out, **kwargs)
+KeyboardInterrupt

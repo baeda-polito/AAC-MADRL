@@ -1,0 +1,26 @@
+2025-09-18 19:14:29,997 INFO    MainThread:23648 [wandb_setup.py:_flush():81] Current SDK version is 0.21.4
+2025-09-18 19:14:29,998 INFO    MainThread:23648 [wandb_setup.py:_flush():81] Configure stats pid to 23648
+2025-09-18 19:14:29,999 INFO    MainThread:23648 [wandb_setup.py:_flush():81] Loading settings from C:\Users\sabry\.config\wandb\settings
+2025-09-18 19:14:29,999 INFO    MainThread:23648 [wandb_setup.py:_flush():81] Loading settings from C:\Users\sabry\Documents\Citylearn_dinamics\wandb\settings
+2025-09-18 19:14:29,999 INFO    MainThread:23648 [wandb_setup.py:_flush():81] Loading settings from environment variables
+2025-09-18 19:14:29,999 INFO    MainThread:23648 [wandb_init.py:setup_run_log_directory():686] Logging user logs to C:\Users\sabry\Documents\Citylearn_dinamics\wandb\run-20250918_191429-7kaddq70\logs\debug.log
+2025-09-18 19:14:30,000 INFO    MainThread:23648 [wandb_init.py:setup_run_log_directory():687] Logging internal logs to C:\Users\sabry\Documents\Citylearn_dinamics\wandb\run-20250918_191429-7kaddq70\logs\debug-internal.log
+2025-09-18 19:14:30,001 INFO    MainThread:23648 [wandb_init.py:init():813] calling init triggers
+2025-09-18 19:14:30,001 INFO    MainThread:23648 [wandb_init.py:init():818] wandb.init called with sweep_config: {}
+config: {'dataset': 'C:\\Users\\sabry\\Documents\\Citylearn_dinamics\\data\\CA_10_dynamics\\schema.json', 'dataset_mode': 'local', 'central_agent': False, 'episodes': 10, 'lr': 0.001, 'beta': 0.0, 'output_root': 'C:\\Users\\sabry\\Documents\\Citylearn_dinamics\\outputs', 'zip_path': 'C:\\Users\\sabry\\Documents\\Citylearn_dinamics\\outputs\\CA_10_dynamics\\save_models\\aac_madrl\\beta=0.0_gamma=2.8\\lr=0.001\\aac_madrl.zip', 'data_dir': 'C:\\Users\\sabry\\.citylearn\\data', 'sim_start': 0, 'sim_end': 743, 'classes': {'dhw_storage': 21, 'electrical_storage': 21, 'cooling_or_heating_device': 21}, '_wandb': {}}
+2025-09-18 19:14:30,001 INFO    MainThread:23648 [wandb_init.py:init():854] starting backend
+2025-09-18 19:14:32,291 INFO    MainThread:23648 [wandb_init.py:init():857] sending inform_init request
+2025-09-18 19:14:32,306 INFO    MainThread:23648 [wandb_init.py:init():865] backend started and connected
+2025-09-18 19:14:32,313 INFO    MainThread:23648 [wandb_init.py:init():936] updated telemetry
+2025-09-18 19:14:32,437 INFO    MainThread:23648 [wandb_init.py:init():960] communicating run to backend with 90.0 second timeout
+2025-09-18 19:14:33,110 INFO    MainThread:23648 [wandb_init.py:init():1011] starting run threads in backend
+2025-09-18 19:14:33,416 INFO    MainThread:23648 [wandb_run.py:_console_start():2506] atexit reg
+2025-09-18 19:14:33,417 INFO    MainThread:23648 [wandb_run.py:_redirect():2354] redirect: wrap_raw
+2025-09-18 19:14:33,417 INFO    MainThread:23648 [wandb_run.py:_redirect():2423] Wrapping output streams.
+2025-09-18 19:14:33,418 INFO    MainThread:23648 [wandb_run.py:_redirect():2446] Redirects installed.
+2025-09-18 19:14:33,429 INFO    MainThread:23648 [wandb_init.py:init():1049] run started, returning control to user process
+2025-09-18 21:26:24,011 INFO    MainThread:23648 [wandb_run.py:_finish():2272] finishing run baeda/TEST_DYNAMICS/7kaddq70
+2025-09-18 21:26:24,012 INFO    MainThread:23648 [wandb_run.py:_atexit_cleanup():2471] got exitcode: 0
+2025-09-18 21:26:24,015 INFO    MainThread:23648 [wandb_run.py:_restore():2453] restore
+2025-09-18 21:26:24,016 INFO    MainThread:23648 [wandb_run.py:_restore():2459] restore done
+2025-09-18 21:26:25,137 INFO    MainThread:23648 [wandb_run.py:_footer_sync_info():3867] logging synced files

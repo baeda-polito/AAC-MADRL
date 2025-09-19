@@ -1,0 +1,28 @@
+Traceback (most recent call last):
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\train_sac.py", line 182, in <module>
+    main()
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\train_sac.py", line 165, in main
+    model.learn(episodes=args.episodes)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\agents\base.py", line 158, in learn
+    next_observations, rewards, terminated, truncated, _ = self.env.step(actions)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\citylearn.py", line 888, in step
+    building.apply_actions(**building_actions)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\building.py", line 2249, in apply_actions
+    self.update_indoor_dry_bulb_temperature()
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\building.py", line 2333, in update_indoor_dry_bulb_temperature
+    indoor_dry_bulb_temperature_norm, self.dynamics._hidden_state = self.dynamics(model_input_tensor.float(), hidden_state)
+  File "c:\Users\sabry\Documents\Citylearn_dinamics\.venv\lib\site-packages\torch\nn\modules\module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "c:\Users\sabry\Documents\Citylearn_dinamics\.venv\lib\site-packages\torch\nn\modules\module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\dynamics.py", line 98, in forward
+    lstm_out = self.dropout(lstm_out)
+  File "c:\Users\sabry\Documents\Citylearn_dinamics\.venv\lib\site-packages\torch\nn\modules\module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "c:\Users\sabry\Documents\Citylearn_dinamics\.venv\lib\site-packages\torch\nn\modules\module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "c:\Users\sabry\Documents\Citylearn_dinamics\.venv\lib\site-packages\torch\nn\modules\dropout.py", line 70, in forward
+    return F.dropout(input, self.p, self.training, self.inplace)
+  File "c:\Users\sabry\Documents\Citylearn_dinamics\.venv\lib\site-packages\torch\nn\functional.py", line 1422, in dropout
+    _VF.dropout_(input, p, training) if inplace else _VF.dropout(input, p, training)
+KeyboardInterrupt

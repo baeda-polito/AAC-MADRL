@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\train_sac.py", line 182, in <module>
+    main()
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\train_sac.py", line 161, in main
+    env = CityLearnEnv(dataset_arg, **env_kwargs)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\citylearn.py", line 130, in __init__
+    seconds_per_time_step, reward_function, central_agent, shared_observations, episode_tracker = self._load(
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\citylearn.py", line 1388, in _load
+    buildings.append(self._load_building(i, building_name, schema, episode_tracker, pv_sizing_data, battery_sizing_data,**kwargs))
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\citylearn.py", line 1692, in _load_building
+    autosizer(**autosize_kwargs)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\building.py", line 1869, in autosize_pv
+    self.pv.nominal_power, solar_generation = self.pv.autosize(demand, epw_filepath, **kwargs)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\energy_model.py", line 550, in autosize
+    raise e
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\energy_model.py", line 543, in autosize
+    model.execute()
+Exception: pvwattsv8 execution error.
+	exec fail(pvwattsv8): could not open file for reading: C:\Users\sabry\Documents\Citylearn_dinamics\data\CA_10_dynamics\weather.epw

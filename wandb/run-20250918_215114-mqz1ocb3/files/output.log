@@ -1,0 +1,34 @@
+Traceback (most recent call last):
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\train_aac_madrl.py", line 205, in <module>
+    main()
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\train_aac_madrl.py", line 188, in main
+    model.learn(episodes=args.episodes)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\agents\base.py", line 163, in learn
+    self.update(observations, actions, rewards, next_observations, terminated=terminated, truncated=truncated)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\agents\aac_madrl.py", line 732, in update
+    self.update_critic(sample)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\agents\aac_madrl.py", line 793, in update_critic
+    next_qs = self.target_critic(trgt_critic_in)
+  File "c:\Users\sabry\Documents\Citylearn_dinamics\.venv\lib\site-packages\torch\nn\modules\module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "c:\Users\sabry\Documents\Citylearn_dinamics\.venv\lib\site-packages\torch\nn\modules\module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\agents\aac_madrl.py", line 181, in forward
+    sa_encodings = [encoder(inp) for encoder, inp in zip(self.critic_encoders, inps)]
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\agents\aac_madrl.py", line 181, in <listcomp>
+    sa_encodings = [encoder(inp) for encoder, inp in zip(self.critic_encoders, inps)]
+  File "c:\Users\sabry\Documents\Citylearn_dinamics\.venv\lib\site-packages\torch\nn\modules\module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "c:\Users\sabry\Documents\Citylearn_dinamics\.venv\lib\site-packages\torch\nn\modules\module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "c:\Users\sabry\Documents\Citylearn_dinamics\.venv\lib\site-packages\torch\nn\modules\container.py", line 244, in forward
+    input = module(input)
+  File "c:\Users\sabry\Documents\Citylearn_dinamics\.venv\lib\site-packages\torch\nn\modules\module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "c:\Users\sabry\Documents\Citylearn_dinamics\.venv\lib\site-packages\torch\nn\modules\module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "c:\Users\sabry\Documents\Citylearn_dinamics\.venv\lib\site-packages\torch\nn\modules\batchnorm.py", line 193, in forward
+    return F.batch_norm(
+  File "c:\Users\sabry\Documents\Citylearn_dinamics\.venv\lib\site-packages\torch\nn\functional.py", line 2817, in batch_norm
+    return torch.batch_norm(
+KeyboardInterrupt

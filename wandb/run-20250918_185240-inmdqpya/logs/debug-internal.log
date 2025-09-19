@@ -1,0 +1,11 @@
+{"time":"2025-09-18T18:52:42.8410174+02:00","level":"INFO","msg":"stream: starting","core version":"0.21.4"}
+{"time":"2025-09-18T18:52:43.2744422+02:00","level":"INFO","msg":"stream: created new stream","id":"inmdqpya"}
+{"time":"2025-09-18T18:52:43.2744422+02:00","level":"INFO","msg":"stream: started","id":"inmdqpya"}
+{"time":"2025-09-18T18:52:43.2744422+02:00","level":"INFO","msg":"sender: started","stream_id":"inmdqpya"}
+{"time":"2025-09-18T18:52:43.2744422+02:00","level":"INFO","msg":"writer: started","stream_id":"inmdqpya"}
+{"time":"2025-09-18T18:52:43.2744422+02:00","level":"INFO","msg":"handler: started","stream_id":"inmdqpya"}
+{"time":"2025-09-18T18:53:56.8500348+02:00","level":"INFO","msg":"stream: closing","id":"inmdqpya"}
+{"time":"2025-09-18T18:53:57.8463975+02:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-09-18T18:53:58.1125399+02:00","level":"INFO","msg":"handler: closed","stream_id":"inmdqpya"}
+{"time":"2025-09-18T18:53:58.1130895+02:00","level":"INFO","msg":"sender: closed","stream_id":"inmdqpya"}
+{"time":"2025-09-18T18:53:58.1130895+02:00","level":"INFO","msg":"stream: closed","id":"inmdqpya"}

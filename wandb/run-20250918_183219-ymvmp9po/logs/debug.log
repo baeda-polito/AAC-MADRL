@@ -1,0 +1,23 @@
+2025-09-18 18:32:19,749 INFO    MainThread:21332 [wandb_setup.py:_flush():81] Current SDK version is 0.21.4
+2025-09-18 18:32:19,749 INFO    MainThread:21332 [wandb_setup.py:_flush():81] Configure stats pid to 21332
+2025-09-18 18:32:19,749 INFO    MainThread:21332 [wandb_setup.py:_flush():81] Loading settings from C:\Users\sabry\.config\wandb\settings
+2025-09-18 18:32:19,749 INFO    MainThread:21332 [wandb_setup.py:_flush():81] Loading settings from C:\Users\sabry\Documents\Citylearn_dinamics\wandb\settings
+2025-09-18 18:32:19,749 INFO    MainThread:21332 [wandb_setup.py:_flush():81] Loading settings from environment variables
+2025-09-18 18:32:19,749 INFO    MainThread:21332 [wandb_init.py:setup_run_log_directory():686] Logging user logs to C:\Users\sabry\Documents\Citylearn_dinamics\wandb\run-20250918_183219-ymvmp9po\logs\debug.log
+2025-09-18 18:32:19,751 INFO    MainThread:21332 [wandb_init.py:setup_run_log_directory():687] Logging internal logs to C:\Users\sabry\Documents\Citylearn_dinamics\wandb\run-20250918_183219-ymvmp9po\logs\debug-internal.log
+2025-09-18 18:32:19,751 INFO    MainThread:21332 [wandb_init.py:init():813] calling init triggers
+2025-09-18 18:32:19,751 INFO    MainThread:21332 [wandb_init.py:init():818] wandb.init called with sweep_config: {}
+config: {'dataset': 'C:\\Users\\sabry\\Documents\\Citylearn_dinamics\\data\\TX_50_dynamics\\schema.json', 'dataset_mode': 'local', 'central_agent': False, 'episodes': 10, 'lr': 0.001, 'beta': 0.0, 'gamma': 1.0, 'output_root': 'C:\\Users\\sabry\\Documents\\Citylearn_dinamics\\outputs', 'zip_path': 'C:\\Users\\sabry\\Documents\\Citylearn_dinamics\\outputs\\TX_50_dynamics\\save_models\\sac\\beta=0.0_gamma=1.0\\lr=0.001\\sac.zip', 'data_dir': 'C:\\Users\\sabry\\.citylearn\\data', 'sim_start': 3624, 'sim_end': 4343, '_wandb': {}}
+2025-09-18 18:32:19,751 INFO    MainThread:21332 [wandb_init.py:init():854] starting backend
+2025-09-18 18:32:22,035 INFO    MainThread:21332 [wandb_init.py:init():857] sending inform_init request
+2025-09-18 18:32:22,051 INFO    MainThread:21332 [wandb_init.py:init():865] backend started and connected
+2025-09-18 18:32:22,059 INFO    MainThread:21332 [wandb_init.py:init():936] updated telemetry
+2025-09-18 18:32:22,176 INFO    MainThread:21332 [wandb_init.py:init():960] communicating run to backend with 90.0 second timeout
+2025-09-18 18:32:22,714 INFO    MainThread:21332 [wandb_init.py:init():1011] starting run threads in backend
+2025-09-18 18:32:22,987 INFO    MainThread:21332 [wandb_run.py:_console_start():2506] atexit reg
+2025-09-18 18:32:22,987 INFO    MainThread:21332 [wandb_run.py:_redirect():2354] redirect: wrap_raw
+2025-09-18 18:32:22,988 INFO    MainThread:21332 [wandb_run.py:_redirect():2423] Wrapping output streams.
+2025-09-18 18:32:22,988 INFO    MainThread:21332 [wandb_run.py:_redirect():2446] Redirects installed.
+2025-09-18 18:32:22,997 INFO    MainThread:21332 [wandb_init.py:init():1049] run started, returning control to user process
+2025-09-18 18:33:10,726 INFO    wandb-AsyncioManager-main:21332 [service_client.py:_forward_responses():84] Reached EOF.
+2025-09-18 18:33:10,726 INFO    wandb-AsyncioManager-main:21332 [mailbox.py:close():137] Closing mailbox, abandoning 1 handles.

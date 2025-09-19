@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\train_sac.py", line 182, in <module>
+    main()
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\train_sac.py", line 165, in main
+    model.learn(episodes=args.episodes)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\agents\base.py", line 163, in learn
+    self.update(observations, actions, rewards, next_observations, terminated=terminated, truncated=truncated)
+  File "C:\Users\sabry\Documents\Citylearn_dinamics\citylearn\agents\sac.py", line 159, in update
+    policy_loss.backward()
+  File "c:\Users\sabry\Documents\Citylearn_dinamics\.venv\lib\site-packages\torch\_tensor.py", line 647, in backward
+    torch.autograd.backward(
+  File "c:\Users\sabry\Documents\Citylearn_dinamics\.venv\lib\site-packages\torch\autograd\__init__.py", line 354, in backward
+    _engine_run_backward(
+  File "c:\Users\sabry\Documents\Citylearn_dinamics\.venv\lib\site-packages\torch\autograd\graph.py", line 829, in _engine_run_backward
+    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+KeyboardInterrupt

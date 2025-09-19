@@ -10,10 +10,11 @@ class ComfortConsumptionDistrictRewardFixed(RewardFunction):
     - district: -(sum_i net_i)^2              # penalità quadratica sul distretto
     """
 
-    def __init__(self, env_metadata: Mapping[str, Any], beta: float = 0.5, band: Optional[float] = None):
+    def __init__(self, env_metadata: Mapping[str, Any], beta: float, gamma:float, band: Optional[float] = None):
         super().__init__(env_metadata)
         self.beta = float(beta)
         self.band = band  # se None, usa o['comfort_band']
+        self.gamma = float(gamma)
 
     # ---------- comfort helper ----------
     def _comfort_term(self, o: Mapping[str, Union[int, float]]) -> float:
@@ -38,7 +39,10 @@ class ComfortConsumptionDistrictRewardFixed(RewardFunction):
             lo, hi = sp - band, sp + band
             if lo <= Tin <= hi:
                 return 0.0
-            delta = Tin - sp
+            else:
+                delta_above = max(Tin - hi, 0)
+                delta_below = max(lo - Tin, 0)
+                delta = delta_above + delta_below
             return -(delta ** 2)
 
     def calculate(self, observations: List[Mapping[str, Union[int, float]]]) -> List[float]:
@@ -48,10 +52,11 @@ class ComfortConsumptionDistrictRewardFixed(RewardFunction):
         consumptions = [min(((-1.0) * net) ** 3, 0.0) for net in nets]
         
         district_net = sum(nets)
-        district = -(district_net ** 2)
+        district = district_net ** 2
         n_agents = len(observations)
-        district = district / (n_agents **3.5)
-        rewards = [(1.0 - self.beta) * (comforts[i] + consumptions[i]) + self.beta * district
+        district /= (n_agents ** self.gamma)  # normalizza per il numero di agenti
+        district *= -1.0  # penalità
+        rewards = [100*((1.0 - self.beta) * (comforts[i] + consumptions[i]) + self.beta * district)
                    for i in range(n_agents)]
 
         if self.central_agent:
