@@ -9,3 +9,18 @@
 2025-09-19 09:54:52,067 INFO    MainThread:22392 [wandb_init.py:init():818] wandb.init called with sweep_config: {}
 config: {'dataset': 'C:\\Users\\sabry\\Documents\\Citylearn_dinamics\\data\\CA_10_dynamics\\schema.json', 'dataset_mode': 'local', 'central_agent': False, 'episodes': 10, 'lr': 0.001, 'beta': 1.0, 'gamma': 2.8, 'output_root': 'C:\\Users\\sabry\\Documents\\Citylearn_dinamics\\outputs', 'zip_path': 'C:\\Users\\sabry\\Documents\\Citylearn_dinamics\\outputs\\CA_10_dynamics\\save_models\\sac\\beta=1.0_gamma=2.8\\lr=0.001\\sac.zip', 'data_dir': 'C:\\Users\\sabry\\.citylearn\\data', 'sim_start': 3624, 'sim_end': 4343, '_wandb': {}}
 2025-09-19 09:54:52,067 INFO    MainThread:22392 [wandb_init.py:init():854] starting backend
+2025-09-19 09:54:54,360 INFO    MainThread:22392 [wandb_init.py:init():857] sending inform_init request
+2025-09-19 09:54:54,375 INFO    MainThread:22392 [wandb_init.py:init():865] backend started and connected
+2025-09-19 09:54:54,387 INFO    MainThread:22392 [wandb_init.py:init():936] updated telemetry
+2025-09-19 09:54:54,525 INFO    MainThread:22392 [wandb_init.py:init():960] communicating run to backend with 90.0 second timeout
+2025-09-19 09:54:54,997 INFO    MainThread:22392 [wandb_init.py:init():1011] starting run threads in backend
+2025-09-19 09:54:55,247 INFO    MainThread:22392 [wandb_run.py:_console_start():2506] atexit reg
+2025-09-19 09:54:55,247 INFO    MainThread:22392 [wandb_run.py:_redirect():2354] redirect: wrap_raw
+2025-09-19 09:54:55,248 INFO    MainThread:22392 [wandb_run.py:_redirect():2423] Wrapping output streams.
+2025-09-19 09:54:55,249 INFO    MainThread:22392 [wandb_run.py:_redirect():2446] Redirects installed.
+2025-09-19 09:54:55,258 INFO    MainThread:22392 [wandb_init.py:init():1049] run started, returning control to user process
+2025-09-19 11:02:18,230 INFO    MainThread:22392 [wandb_run.py:_finish():2272] finishing run baeda/TEST_DYNAMICS/04yirmds
+2025-09-19 11:02:18,232 INFO    MainThread:22392 [wandb_run.py:_atexit_cleanup():2471] got exitcode: 0
+2025-09-19 11:02:18,234 INFO    MainThread:22392 [wandb_run.py:_restore():2453] restore
+2025-09-19 11:02:18,235 INFO    MainThread:22392 [wandb_run.py:_restore():2459] restore done
+2025-09-19 11:02:19,166 INFO    MainThread:22392 [wandb_run.py:_footer_sync_info():3867] logging synced files

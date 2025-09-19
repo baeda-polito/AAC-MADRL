@@ -28,7 +28,7 @@ Key characteristics:
 This makes AAC-MADRL suitable for large residential districts, where **coordination** is crucial.
 
 ### Critic Architecture
-upload image from docs/critic_architecure
+![Attention-based Critic](docs/critic_architecture.png)
 
 *The centralized critic computes Q-functions for each agent by embedding each agent’s state–action pair, applying a multi-head attention module to extract the most relevant inter-agent dependencies, and aggregating the attended features before the final Q-value regression layer.*
 
@@ -94,3 +94,12 @@ For AAC-MADRL, discretizing device actions proved crucial for stability.
 The paper shows that 21 classes for storage devices and 11 classes for heating/cooling devices yield the best trade-off between performance and stability.
 These values can be tuned for other scenarios.
 
+### Citation
+
+If you use this repository or reproduce the results, please cite:
+
+Savino S., Minella T., Nagy Z., Capozzoli A. (2025).
+A scalable demand-side energy management control strategy for large residential districts based on an attention-driven multi-agent DRL approach.
+Applied Energy.
+
+See also CITATION.cff for citation metadata.
