@@ -1,19 +1,19 @@
 # AAC-MADRL: Actor-Attention-Critic Multi-Agent DRL
 
-This repository provides training and deployment scripts for three controllers within the **CityLearn** environment:
+This repository provides training and deployment scripts for three controllers within the **CityLearn 2.3.1** environment:
 
 - **AAC-MADRL** — *Actor-Attention-Critic Multi-Agent DRL*: a novel attention-based multi-agent actor–critic method for district-scale demand-side management (DSM).
 - **SAC**
 - **MARLISA**
 
-The code is associated with the paper:
+The AAC-MADRL framework is described in:
 
 > **S. Savino, T. Minella, Z. Nagy, A. Capozzoli (2025)**  
 > *A scalable demand-side energy management control strategy for large residential districts based on an attention-driven multi-agent DRL approach*, **Applied Energy**.  
 > See the **Citation** section for details.
 marli
 ---
-
+**Note**: The paper’s case study was conducted on an earlier version of CityLearn that did not model indoor building temperature dynamics. This repository targets the updated CityLearn API and integrates building dynamics.
 
 AAC-MADRL is an **attention-driven, discrete-action, multi-agent actor–critic algorithm** tailored for energy flexibility control at the district level. 
 
