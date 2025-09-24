@@ -11,7 +11,7 @@ from citylearn.citylearn import CityLearnEnv
 from citylearn.agents.aac_madrl import AAC_MADRL
 from citylearn.agents.sac import SAC
 from citylearn.agents.marlisa import MARLISA
-from citylearn.agents.rbc import OptimizedRBC as RBC
+from citylearn.agents.rbc import TemperatureBasedRBC as RBC
 
 
 # ----------------------------- helpers -----------------------------
