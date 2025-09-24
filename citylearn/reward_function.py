@@ -342,7 +342,6 @@ class SolarPenaltyAndComfortReward(RewardFunction):
 
         return reward
 
-
 class V2GPenaltyReward(MARL):
     """Rewards with considerations for electric vehicle charging behaviours in a V2G setting.
     Note that this function rewards/penalizes only the electric vehicle part. For a comprehensive reward strategy

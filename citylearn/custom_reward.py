@@ -2,6 +2,7 @@ from typing import Any, List, Mapping, Union, Optional
 import numpy as np
 from citylearn.reward_function import RewardFunction
 
+
 class ComfortConsumptionDistrictRewardFixed(RewardFunction):
     """
     Reward = (1 - beta) * (comfort_i + consumption_i) + beta * district
@@ -10,7 +11,7 @@ class ComfortConsumptionDistrictRewardFixed(RewardFunction):
     - district: -(sum_i net_i)^2              # penalità quadratica sul distretto
     """
 
-    def __init__(self, env_metadata: Mapping[str, Any], beta: float, gamma:float, band: Optional[float] = None):
+    def __init__(self, env_metadata: Mapping[str, Any], beta: float, gamma: float, band: Optional[float] = None):
         super().__init__(env_metadata)
         self.beta = float(beta)
         self.band = band  # se None, usa o['comfort_band']
@@ -50,13 +51,13 @@ class ComfortConsumptionDistrictRewardFixed(RewardFunction):
 
         comforts = [self._comfort_term(o) for o in observations]
         consumptions = [min(((-1.0) * net) ** 3, 0.0) for net in nets]
-        
+
         district_net = sum(nets)
         district = district_net ** 2
         n_agents = len(observations)
         district /= (n_agents ** self.gamma)  # normalizza per il numero di agenti
         district *= -1.0  # penalità
-        rewards = [100*((1.0 - self.beta) * (comforts[i] + consumptions[i]) + self.beta * district)
+        rewards = [10 * ((1.0 - self.beta) * (comforts[i] + consumptions[i]) + self.beta * district)
                    for i in range(n_agents)]
 
         if self.central_agent:
